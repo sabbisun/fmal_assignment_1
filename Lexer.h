@@ -9,7 +9,6 @@ class Lexer
 {
     public:
         Lexer();
-        virtual ~Lexer();
         /**
         * @brief nextToken
         * Scans the standard input (stdin), looking for patterns that match one of the tokens from the Token class i.e. ID, INT, ADD etc.

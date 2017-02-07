@@ -33,14 +33,13 @@ class Parser
     public:
         Parser();
         Parser(Lexer luthor);
-        virtual ~Parser();
         void parse(); /// To initiate the parse
 
     protected:
         /// Other methods are private
     private:
         Lexer luthor;
-        Token black; ///for the current token
+        //Token black; ///for the current token
 
 
 

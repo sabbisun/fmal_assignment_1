@@ -9,10 +9,10 @@ Parser::Parser(Lexer luthor)
 
 
 }
-Parser::~Parser()
+/*Parser::~Parser()
 {
     //dtor
-}
+}*/
 
 void Parser::parse()
 {

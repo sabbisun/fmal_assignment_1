@@ -1,13 +1,11 @@
-#include <iostream>
-#include "Lexer.h"
-#include "Parser.h"
+#include "Compiler.h"
 
-using namespace std;
-
-int main()
+Compiler::Compiler()
 {
-    Lexer myLexer = Lexer();
-    Parser myParser = Parser(myLexer);
-    myParser.parse();
-    return 0;
+    //ctor
+}
+
+Compiler::~Compiler()
+{
+    //dtor
 }
