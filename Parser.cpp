@@ -9,3 +9,8 @@ Parser::~Parser()
 {
     //dtor
 }
+
+void Parser::parse()
+{
+
+}

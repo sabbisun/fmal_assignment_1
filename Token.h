@@ -18,4 +18,4 @@ class Token
 
 };
 
-#endif // TEST_H
+#endif // TOKEN_H
