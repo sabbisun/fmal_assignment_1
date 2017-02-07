@@ -17,12 +17,12 @@
 *
 * Stack-based intermediate code or S.
 *
-* PUSH
-* ADD
-* SUB
-* MULT
-* ASSIGN
-* PRINT
+* PUSH op // pushes the operand op onto the stack
+* ADD     // pops the two top elements from the stack, adds their values and pushes the result back onto the stack
+* SUB     // pops the two top elements from the stack, subtracts the first value retrieved from the second value and pushes the result back onto the stack
+* MULT    // pops the two top elements from the stack, multiplies their values and pushes the result back onto the stack
+* ASSIGN  // pops the two top elements from the stack, assigns the first element (a value) to the second element (a variable)
+* PRINT   // prints the value currently on top of the stack
 *
 * The output of the parser is the stack-based intermediate code S, corresponding to the given program, written to stdout.
 * If an expression is not in the language(or if ERROR token is returned by the Lexer) then parser outputs error msg "Syntax error!"
@@ -32,6 +32,7 @@ class Parser
 {
     public:
         Parser();
+        Parser(Lexer luthor);
         virtual ~Parser();
         void parse(); /// To initiate the parse
 

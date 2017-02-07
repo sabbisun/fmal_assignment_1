@@ -6,8 +6,8 @@ using namespace std;
 
 int main()
 {
-    Lexer myLexer = new Lexer();
-    Parser myParser = new Parser(myLexer);
+    Lexer myLexer = Lexer();
+    Parser myParser = Parser(myLexer);
     myParser.parse();
     return 0;
 }

@@ -11,6 +11,9 @@ Lexer::~Lexer()
 }
 void Lexer::nextToken()
 {
+    string s;
+    cin >> s;
 
+    //ourToken;
 
 }

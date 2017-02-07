@@ -1,6 +1,9 @@
 #ifndef LEXER_H
 #define LEXER_H
+#include "Token.h"
+#include <iostream>
 
+using namespace std;
 
 class Lexer
 {
@@ -25,6 +28,7 @@ class Lexer
 
     private:
 
+        Token ourToken;
 
 
 };
