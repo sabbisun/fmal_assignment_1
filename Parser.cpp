@@ -19,6 +19,7 @@ void Parser::outputErrorMsg()
     //cout << "Syntax error!" << endl;
 
     output.push_back("Syntax error!\n");
+    error = true;
     return;
 }
 
@@ -39,7 +40,7 @@ void Parser::parse() {
 }
 void Parser::Statements() {
 
-    if(currToken.getTokenCode() == Token::ERROR)
+    if(currToken.getTokenCode() == Token::ERROR || error)
     {
         outputErrorMsg();
         return;
@@ -56,6 +57,12 @@ void Parser::Statements() {
     //cout << "calling statement" << endl;
 	Statement();
 
+	if(error)
+    {
+        outputErrorMsg();
+        return;
+    }
+
 	if(currToken.getTokenCode() == Token::SEMICOL)
 	{   //cout << "Token is SEMICOL" << endl;
 		currToken = lex.nextToken();;
@@ -68,11 +75,10 @@ void Parser::Statements() {
 	}
 	//cout << "calling statements" << endl;
 	Statements();
-
 }
 void Parser::Statement() {
 
-    if(currToken.getTokenCode() == Token::ERROR)
+    if(currToken.getTokenCode() == Token::ERROR || error)
     {
         outputErrorMsg();
         return;
@@ -109,7 +115,6 @@ void Parser::Statement() {
 
 		if(currToken.getTokenCode() == Token::ASSIGN)
 		{   //cout << "Token is ASSIGN" << endl;
-
 			currToken = lex.nextToken();
 		}
         else
@@ -119,7 +124,7 @@ void Parser::Statement() {
             return;
 		}
 		Expr();
-		if(currToken.getTokenCode() == Token::ERROR)
+		if(currToken.getTokenCode() == Token::ERROR  || error)
         {
             outputErrorMsg();
             return;
@@ -130,7 +135,7 @@ void Parser::Statement() {
 }
 void Parser::Expr() {
 
-    if(currToken.getTokenCode() == Token::ERROR)
+    if(currToken.getTokenCode() == Token::ERROR  || error)
     {
         outputErrorMsg();
         return;
@@ -139,12 +144,24 @@ void Parser::Expr() {
     //cout << "Inside Expr" << endl;
 	Term();
 
+	if(error)
+    {
+        outputErrorMsg();
+        return;
+    }
+
 	if(currToken.getTokenCode() == Token::ADD)
 	{
 
 	    //cout << "Token is ADD" << endl;
 		currToken = lex.nextToken();
 		Expr();
+
+		if(error)
+        {
+            outputErrorMsg();
+            return;
+        }
 		//cout << "ADD" << endl;
 		output.push_back("ADD\n");
 	}
@@ -154,13 +171,20 @@ void Parser::Expr() {
 	    //cout << "Token is SUB" << endl;
 		currToken = lex.nextToken();
 		Expr();
+
+		if(error)
+        {
+            outputErrorMsg();
+            return;
+        }
+
 		output.push_back("SUB\n");
 		//cout << "SUB" << endl;
 	}
 }
 void Parser::Term() {
 
-    if(currToken.getTokenCode() == Token::ERROR)
+    if(currToken.getTokenCode() == Token::ERROR  || error)
     {
         outputErrorMsg();
         return;
@@ -168,6 +192,12 @@ void Parser::Term() {
 
     //cout << "Inside Term" << endl;
 	Factor();
+
+	if(error)
+    {
+        outputErrorMsg();
+        return;
+    }
 
 	if(currToken.getTokenCode() == Token::MULT)
 	{
@@ -181,13 +211,14 @@ void Parser::Term() {
 }
 void Parser::Factor() {
 
-    if(currToken.getTokenCode() == Token::ERROR)
+    if(currToken.getTokenCode() == Token::ERROR  || error)
     {
         outputErrorMsg();
         return;
     }
 
     //cout << "Inside Factor" << endl;
+    //cout << "tokencode " << currToken.getTokenCode()<< endl;
 	if(currToken.getTokenCode() == Token::INT)
 	{
 	    //cout << "PUSH " << currToken.getLexeme() << endl;
@@ -207,6 +238,12 @@ void Parser::Factor() {
 		currToken = lex.nextToken();
 		Expr();
 
+		if(error)
+        {
+            outputErrorMsg();
+            return;
+        }
+
 		if (currToken.getTokenCode() == Token::RPAREN)
 		{   ////cout << "Token is RPAREN" << endl;
 			currToken = lex.nextToken();
@@ -217,4 +254,9 @@ void Parser::Factor() {
 			return;
 		}
 	}
+	else
+    {
+        outputErrorMsg();
+        return;
+    }
 }

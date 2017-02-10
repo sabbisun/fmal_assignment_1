@@ -42,6 +42,7 @@ class Parser
         Lexer lex;
         Token currToken; ///for the current token
         vector<string> output;
+        bool error = false;
 
         void Statements();
         void Statement();
