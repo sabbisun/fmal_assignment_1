@@ -11,6 +11,7 @@ class Token
     public:
         enum TokenCode { ID, ASSIGN, SEMICOL, INT, ADD, SUB, MULT, LPAREN, RPAREN, PRINT, END, ERROR };
         Token(){};
+
         Token(TokenCode tCode, std::string lexeme) {
             this->tCode = tCode;
             this->lexeme = lexeme;

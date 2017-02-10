@@ -16,7 +16,9 @@ Parser::Parser(Lexer luthor)
 
 void Parser::outputErrorMsg()
 {
-    cout << "Syntax error!" << endl;
+    //cout << "Syntax error!" << endl;
+
+    output.push_back("Syntax error!\n");
     return;
 }
 
@@ -26,12 +28,24 @@ void Parser::parse() {
 	currToken = lex.nextToken();
 	//cout << "calling statements" << endl;
 	Statements();
+	for(unsigned int i = 0; i < output.size(); i++)
+    {
+        cout << output[i];
+    }
 }
 void Parser::Statements() {
+
+    if(currToken.getTokenCode() == Token::ERROR)
+    {
+        outputErrorMsg();
+        return;
+    }
 
     //cout << "inside statements" << endl;
 	if(currToken.getTokenCode() == Token::END)
 	{
+	    //cout << "END" << endl;
+	    output.push_back("END\n");
 	    //cout << "Token is END, returning" << endl;
 		return;
 	}
@@ -46,82 +60,142 @@ void Parser::Statements() {
 	{
 	    //cout << "ERROR in Statements" << endl;
 		outputErrorMsg();
+		return;
 	}
 	//cout << "calling statements" << endl;
 	Statements();
 
 }
 void Parser::Statement() {
+
+    if(currToken.getTokenCode() == Token::ERROR)
+    {
+        outputErrorMsg();
+        return;
+    }
+
     //cout << "inside statement" << endl;
 	if(currToken.getTokenCode() == Token::PRINT)
-	{   //cout << "Token is PRINT" << endl;
+	{
+
+	    //cout << "Token is PRINT" << endl;
 		currToken = lex.nextToken();
 
 		if(currToken.getTokenCode() == Token::ID)
 		{   //cout << "Token is ID" << endl;
+		    //cout << "PUSH " << currToken.getLexeme() << endl;
+		    output.push_back("PUSH " + currToken.getLexeme() +"\n");
 			currToken = lex.nextToken();
 		}
 		else
 		{   //cout << "ERROR in Statement" << endl;
 			outputErrorMsg();
+			return;
 		}
+		output.push_back("PRINT\n");
+		//cout << "PRINT" << endl;
 	}
 	else if(currToken.getTokenCode() == Token::ID)
 	{
-
+        //cout << "PUSH " << currToken.getLexeme() << endl;
+        output.push_back("PUSH " + currToken.getLexeme() +"\n");
         //cout << "Token is ID" << endl;
 		currToken = lex.nextToken();
 
 		if(currToken.getTokenCode() == Token::ASSIGN)
 		{   //cout << "Token is ASSIGN" << endl;
+
 			currToken = lex.nextToken();
 		}
         else
 		{
             //cout << "ERROR in ID ASSIGN" << endl;
             outputErrorMsg();
+            return;
 		}
 		Expr();
+		output.push_back("ASSIGN\n");
+		//cout << "ASSIGN" << endl;
 	}
 	else
 	{   //cout << "ERROR in Statement" << endl;
 		outputErrorMsg();
+		return;
 	}
 
 }
 void Parser::Expr() {
+
+    if(currToken.getTokenCode() == Token::ERROR)
+    {
+        outputErrorMsg();
+        return;
+    }
+
     //cout << "Inside Expr" << endl;
 	Term();
 
 	if(currToken.getTokenCode() == Token::ADD)
-	{   //cout << "Token is ADD" << endl;
+	{
+
+	    //cout << "Token is ADD" << endl;
 		currToken = lex.nextToken();
 		Expr();
+		//cout << "ADD" << endl;
+		output.push_back("ADD\n");
 	}
 	else if(currToken.getTokenCode() == Token::SUB)
-	{   //cout << "Token is SUB" << endl;
+	{
+
+	    //cout << "Token is SUB" << endl;
 		currToken = lex.nextToken();
 		Expr();
+		output.push_back("SUB\n");
+		//cout << "SUB" << endl;
 	}
 }
 void Parser::Term() {
+
+    if(currToken.getTokenCode() == Token::ERROR)
+    {
+        outputErrorMsg();
+        return;
+    }
+
     //cout << "Inside Term" << endl;
 	Factor();
 
 	if(currToken.getTokenCode() == Token::MULT)
-	{   //cout << "Token is MULT" << endl;
+	{
+
+	    //cout << "Token is MULT" << endl;
         currToken = lex.nextToken();
 		Term();
+		output.push_back("MULT\n");
+		//cout << "MULT" << endl;
 	}
 }
 void Parser::Factor() {
+
+    if(currToken.getTokenCode() == Token::ERROR)
+    {
+        outputErrorMsg();
+        return;
+    }
+
     //cout << "Inside Factor" << endl;
 	if(currToken.getTokenCode() == Token::INT)
-	{   //cout << "Token is INT" << endl;
+	{
+	    //cout << "PUSH " << currToken.getLexeme() << endl;
+	    output.push_back("PUSH " + currToken.getLexeme() +"\n");
+	    //cout << "Token is INT" << endl;
 		currToken = lex.nextToken();
 	}
 	else if(currToken.getTokenCode() == Token::ID)
-	{   //cout << "Token is ID" << endl;
+	{
+	    //cout << "PUSH " << currToken.getLexeme() << endl;
+	    output.push_back("PUSH " + currToken.getLexeme() +"\n");
+	    //cout << "Token is ID" << endl;
 		currToken = lex.nextToken();
 	}
 	else if (currToken.getTokenCode() == Token::LPAREN)
@@ -136,6 +210,7 @@ void Parser::Factor() {
 		else
 		{   //cout << "Error in Factor, missing RPAREN after LPAREN" << endl;
 			outputErrorMsg();
+			return;
 		}
 	}
 }

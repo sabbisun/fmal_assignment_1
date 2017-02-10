@@ -41,6 +41,7 @@ class Parser
     private:
         Lexer lex;
         Token currToken; ///for the current token
+        vector<string> output;
 
         void Statements();
         void Statement();

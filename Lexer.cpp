@@ -60,12 +60,12 @@ void Lexer::addToOurTokens()
                 if(index != -1)
                 {
                     ourTokens.push(Token(returnTokenCode(index),isPOE));
-                    cout << "insert print/end lexeme " << isPOE << endl;
+                    //cout << "insert print/end lexeme " << isPOE << endl;
                 }
                 else
                 {
                     ourTokens.push(Token(returnTokenCode(0),isPOE));
-                    cout << "insert id lexeme " << isPOE  << endl;
+                    //cout << "insert id lexeme " << isPOE  << endl;
                 }
                 stringBegin += stringLength;
                 stringLength = 0;
@@ -110,6 +110,8 @@ void Lexer::addToOurTokens()
                 stringLength++;
             }
         }
+
+        ourTokens.push(Token(returnTokenCode(-1),""));
     }
     //cout << "after for loop" << endl;
 
