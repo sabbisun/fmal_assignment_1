@@ -31,6 +31,10 @@ void Parser::parse() {
 	for(unsigned int i = 0; i < output.size(); i++)
     {
         cout << output[i];
+        if(output[i] == "Syntax error!\n")
+        {
+            break;
+        }
     }
 }
 void Parser::Statements() {
@@ -45,7 +49,7 @@ void Parser::Statements() {
 	if(currToken.getTokenCode() == Token::END)
 	{
 	    //cout << "END" << endl;
-	    output.push_back("END\n");
+	    //output.push_back("END\n");
 	    //cout << "Token is END, returning" << endl;
 		return;
 	}
@@ -92,6 +96,7 @@ void Parser::Statement() {
 			outputErrorMsg();
 			return;
 		}
+
 		output.push_back("PRINT\n");
 		//cout << "PRINT" << endl;
 	}
@@ -114,15 +119,14 @@ void Parser::Statement() {
             return;
 		}
 		Expr();
+		if(currToken.getTokenCode() == Token::ERROR)
+        {
+            outputErrorMsg();
+            return;
+        }
 		output.push_back("ASSIGN\n");
 		//cout << "ASSIGN" << endl;
 	}
-	else
-	{   //cout << "ERROR in Statement" << endl;
-		outputErrorMsg();
-		return;
-	}
-
 }
 void Parser::Expr() {
 
@@ -204,7 +208,7 @@ void Parser::Factor() {
 		Expr();
 
 		if (currToken.getTokenCode() == Token::RPAREN)
-		{   //cout << "Token is RPAREN" << endl;
+		{   ////cout << "Token is RPAREN" << endl;
 			currToken = lex.nextToken();
 		}
 		else

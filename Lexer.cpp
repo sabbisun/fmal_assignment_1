@@ -111,7 +111,12 @@ void Lexer::addToOurTokens()
             }
         }
 
-        ourTokens.push(Token(returnTokenCode(-1),""));
+        if(!isalpha(str[i]) && !isdigit(str[i]) && symbol(str[i]) == -1)
+        {
+            //cout << str[i] << endl;
+            ourTokens.push(Token(returnTokenCode(3),str.substr(stringBegin,stringLength)));
+            ourTokens.push(Token(returnTokenCode(-1),""));
+        }
     }
     //cout << "after for loop" << endl;
 
