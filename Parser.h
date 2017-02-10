@@ -2,6 +2,7 @@
 #define PARSER_H
 #include "Lexer.h"
 #include "Token.h"
+#include <iostream>
 /**
 * Syntax analyzer(parser)
 * A top-down recursive-decent parser for the grammar G.
@@ -32,16 +33,21 @@ class Parser
 {
     public:
         Parser();
-        Parser(Lexer luthor);
+        Parser(Lexer lex);
         void parse(); /// To initiate the parse
+        void outputErrorMsg();
 
     protected:
         /// Other methods are private
     private:
-        Lexer luthor;
-        //Token black; ///for the current token
+        Lexer lex;
+        Token currToken; ///for the current token
 
-
+        void Statements();
+        void Statement();
+        void Expr();
+        void Term();
+        void Factor();
 
 };
 
