@@ -34,7 +34,7 @@ class Lexer
         void addToOurTokens();
         int singleLetter(char c);
         Token::TokenCode returnTokenCode(int n);
-        int stringCmd(string str);
+        int isPrintOrEnd(string str);
 
 
 };

@@ -41,39 +41,37 @@ void Lexer::addToOurTokens()
     {
         if(singleLetter(str[i]) != -1)
         {
-            if(isId || isInt)
+            if(isInt)
             {
-                if(isInt)
+                ourTokens.push(Token(returnTokenCode(3),str.substr(stringBegin,stringLength)));
+                stringLength = 0;
+            }
+            else if(isId)
+            {
+                string isPOE = str.substr(stringBegin,stringLength);
+                int index = isPrintOrEnd(isPOE);
+                if(index != -1)
                 {
-                    ourTokens.push(Token(returnTokenCode(3),str.substr(stringBegin,stringLength)));
+                    ourTokens.push(Token(returnTokenCode(index),isPOE));
                 }
-                else if(isId)
+                else
                 {
-                    string maybePE = str.substr(stringBegin,stringLength);
-                    int index = stringCmd(maybePE);
-                    if(index != -1)
-                    {
-                        ourTokens.push(Token(returnTokenCode(index),maybePE));
-                    }
-                    else
-                    {
-                        ourTokens.push(Token(returnTokenCode(0),maybePE));
-                    }
-
+                    ourTokens.push(Token(returnTokenCode(0),isPOE));
                 }
                 stringLength = 0;
             }
-                int index = singleLetter(str[i]);
-                ourTokens.push(Token(returnTokenCode(index),str.substr(i,1)));
-                stringBegin++;
-                isInt = true;
-                isId = true;
+
+            int index = singleLetter(str[i]);
+            ourTokens.push(Token(returnTokenCode(index),str.substr(i,1)));
+            stringBegin++;
+            isInt = false;
+            isId = false;
         }
         else if( isdigit(str[i]) )
         {
             if(isId)
             {
-
+                ourTokens.push(Token(returnTokenCode(-1),""));
                 return;
             }
             else
@@ -86,7 +84,7 @@ void Lexer::addToOurTokens()
         {
             if(isInt)
             {
-
+                ourTokens.push(Token(returnTokenCode(-1),""));
                 return;
             }
             else
@@ -96,13 +94,19 @@ void Lexer::addToOurTokens()
             }
         }
     }
+
+    if(stringLength <= 0)
+    {
+        return;
+    }
+
     string lastStr = str.substr(stringBegin,stringLength);
     if(isInt)
     {
         ourTokens.push(Token(returnTokenCode(3), lastStr));
     }
 
-    int index = stringCmd(lastStr);
+    int index = isPrintOrEnd(lastStr);
     if(index != -1)
     {
         ourTokens.push(Token(returnTokenCode(index),lastStr));
@@ -149,7 +153,7 @@ int Lexer::singleLetter(char c)
     return -1;
 }
 
-int Lexer::stringCmd(string str)
+int Lexer::isPrintOrEnd(string str)
 {
     if(str == "end")
     {
