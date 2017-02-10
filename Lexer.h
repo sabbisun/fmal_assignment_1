@@ -2,6 +2,8 @@
 #define LEXER_H
 #include "Token.h"
 #include <iostream>
+#include <vector>
+#include <queue>
 
 using namespace std;
 
@@ -21,13 +23,18 @@ class Lexer
         *
         *   Lexical analyzer returns a token with TokenCode = ERROR if it finds an illegal lexeme.
         */
-        void nextToken();
+        Token nextToken();
 
     protected:
 
     private:
 
-        Token ourToken;
+        queue<Token> ourTokens;
+
+        void addToOurTokens();
+        int singleLetter(char c);
+        Token::TokenCode returnTokenCode(int n);
+        int stringCmd(string str);
 
 
 };
