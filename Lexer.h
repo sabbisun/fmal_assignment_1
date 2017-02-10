@@ -32,7 +32,7 @@ class Lexer
         queue<Token> ourTokens;
 
         void addToOurTokens();
-        int singleLetter(char c);
+        int symbol(char c);
         Token::TokenCode returnTokenCode(int n);
         int isPrintOrEnd(string str);
 

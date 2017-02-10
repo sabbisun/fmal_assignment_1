@@ -37,7 +37,6 @@ class Parser
         void parse(); /// To initiate the parse
         void outputErrorMsg();
 
-    protected:
         /// Other methods are private
     private:
         Lexer lex;

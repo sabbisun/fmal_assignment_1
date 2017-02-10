@@ -17,12 +17,14 @@ Token Lexer::nextToken()
         addToOurTokens();
         Token curr_token =  ourTokens.front();
         ourTokens.pop();
+        //cout << " token " << curr_token.getTokenCode() << " lexeme " << curr_token.getLexeme() << endl;
         return curr_token;
     }
     else
     {
         Token curr_token =  ourTokens.front();
         ourTokens.pop();
+        //cout << " token " << curr_token.getTokenCode() << " lexeme " << curr_token.getLexeme() << endl;
         return curr_token;
     }
 }
@@ -36,14 +38,19 @@ void Lexer::addToOurTokens()
     int stringLength = 0;
     bool isId = false;
     bool isInt = false;
-
-    for (signed int i = 0; i < str.length(); i++)
+    //cout << "before for loop" << endl;
+    for (unsigned int i = 0; i < str.length(); i++)
     {
-        if(singleLetter(str[i]) != -1)
+        //cout << "at char " << stringBegin  << endl;
+        //cout << "with length " << stringLength  << endl;
+        if(symbol(str[i]) != -1)
         {
+            //cout << "Is a symbol " << str[i]  << endl;
             if(isInt)
             {
+                //cout << "insert Int lexeme " << str.substr(stringBegin,stringLength)  << endl;
                 ourTokens.push(Token(returnTokenCode(3),str.substr(stringBegin,stringLength)));
+                stringBegin += stringLength;
                 stringLength = 0;
             }
             else if(isId)
@@ -53,22 +60,31 @@ void Lexer::addToOurTokens()
                 if(index != -1)
                 {
                     ourTokens.push(Token(returnTokenCode(index),isPOE));
+                    cout << "insert print/end lexeme " << isPOE << endl;
                 }
                 else
                 {
                     ourTokens.push(Token(returnTokenCode(0),isPOE));
+                    cout << "insert id lexeme " << isPOE  << endl;
                 }
+                stringBegin += stringLength;
                 stringLength = 0;
             }
+            //else
+            {
+                stringBegin++;
+            }
 
-            int index = singleLetter(str[i]);
+            int index = symbol(str[i]);
             ourTokens.push(Token(returnTokenCode(index),str.substr(i,1)));
-            stringBegin++;
+            //cout << "insert symbol lexeme " << str.substr(i,1)  << endl;
+
             isInt = false;
             isId = false;
         }
         else if( isdigit(str[i]) )
         {
+            //cout << "Is not a symbol " << str[i]<< endl;
             if(isId)
             {
                 ourTokens.push(Token(returnTokenCode(-1),""));
@@ -82,6 +98,7 @@ void Lexer::addToOurTokens()
         }
         else if( isalpha(str[i]) )
         {
+            //cout << "Is not a symbol " << str[i]<< endl;
             if(isInt)
             {
                 ourTokens.push(Token(returnTokenCode(-1),""));
@@ -94,6 +111,7 @@ void Lexer::addToOurTokens()
             }
         }
     }
+    //cout << "after for loop" << endl;
 
     if(stringLength <= 0)
     {
@@ -101,25 +119,32 @@ void Lexer::addToOurTokens()
     }
 
     string lastStr = str.substr(stringBegin,stringLength);
+
     if(isInt)
     {
+        //cout << "insert Int lexeme " << lastStr  << endl;
         ourTokens.push(Token(returnTokenCode(3), lastStr));
+        return;
     }
 
     int index = isPrintOrEnd(lastStr);
     if(index != -1)
     {
+        //cout << "insert print/end lexeme " << lastStr  << endl;
         ourTokens.push(Token(returnTokenCode(index),lastStr));
+        return;
     }
     else
     {
+        //cout << "insert ID lexeme " << lastStr  << endl;
         ourTokens.push(Token(returnTokenCode(0),lastStr));
+        return;
     }
 }
 
 //enum TokenCode { ID, ASSIGN, SEMICOL, INT, ADD, SUB, MULT, LPAREN, RPAREN, PRINT, END, ERROR };
 
-int Lexer::singleLetter(char c)
+int Lexer::symbol(char c)
 {
     if (c == '+')
     {
